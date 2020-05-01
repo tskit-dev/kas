@@ -1,0 +1,69 @@
+name: Build and test wheels
+
+on:
+  push:
+    branches:
+      - master
+      - test
+  pull_request:
+  create:
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        python: [3.6, 3.7, 3.8]
+        wordsize: [32, 64]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Python ${{ matrix.python }} (${{ matrix.wordsize }}) build
+        env:
+          PYTHON: "py -${{ matrix.python }}-${{ matrix.wordsize }}"
+        shell: bash
+        run: |
+          set -ex
+          cd python
+          ${PYTHON} -VV
+          ${PYTHON} -m pip install --upgrade pip
+          ${PYTHON} -m pip install setuptools wheel
+          ${PYTHON} -m pip install -r requirements/CI/wheel-build.txt
+          ${PYTHON} setup.py build_ext --inplace
+          ${PYTHON} -c "from kastore import _kastore"
+          ${PYTHON} setup.py bdist_wheel
+          ${PYTHON} -m nose -v
+      - name: Upload Wheels
+        uses: actions/upload-artifact@v1
+        with:
+          name: win-wheel-${{ matrix.python }}-${{ matrix.wordsize }}
+          path: python/dist
+
+  OSX:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        python: [3.6, 3.7, 3.8]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Python ${{ matrix.python }} build
+        run: |
+          cd python
+          python -VV
+          pip install --upgrade pip
+          pip install setuptools wheel
+          pip install -r requirements/CI/wheel-build.txt
+          python setup.py build_ext --inplace
+          python -c "from kastore import _kastore"
+          python setup.py bdist_wheel
+          python -m nose -v
+      - name: Upload Wheels
+        uses: actions/upload-artifact@v1
+        with:
+          name: osx-wheel-${{ matrix.python }}
+          path: python/dist

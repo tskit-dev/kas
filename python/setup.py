@@ -22,9 +22,9 @@ class local_build_ext(build_ext):
 
 _kastore_module = Extension(
     "_kastore",
-    sources=["_kastoremodule.c", "lib/kastore.c"],
+    sources=["_kastoremodule.c", "../c/kastore.c"],
     extra_compile_args=["-std=c99"],
-    include_dirs=["lib"],
+    include_dirs=["../c"],
 )
 
 here = os.path.abspath(os.path.dirname(__file__))
