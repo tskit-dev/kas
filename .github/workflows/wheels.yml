@@ -26,15 +26,18 @@ jobs:
           set -ex
           ${PYTHON} -m pip install --upgrade pip
           ${PYTHON} -m pip install setuptools wheel
-          ${PYTHON} -m pip install -r requirements/CI/wheel-build/requirements.txt
+          ${PYTHON} -m pip install -r python/requirements/CI/wheel-build/requirements.txt
       - name: Build C extension
         env:
           PYTHON: "py -${{ matrix.python }}-${{ matrix.wordsize }}"
         shell: bash
         run: |
           set -ex
+          # Fix symlinks on windows
+          git config core.symlinks true
+          git reset --hard
           ${PYTHON} setup.py build_ext --inplace
-          ${PYTHON} -c "from kastore import _kastore"
+          ${PYTHON} -c "import kastore"
       - name: Build Wheel
         env:
           PYTHON: "py -${{ matrix.python }}-${{ matrix.wordsize }}"
@@ -77,11 +80,11 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install setuptools wheel
-          pip install -r requirements/CI/wheel-build/requirements.txt
+          pip install -r python/requirements/CI/wheel-build/requirements.txt
       - name: Build C extension
         run: |
           python setup.py build_ext --inplace
-          python -c "from kastore import _kastore"
+          python -c "import kastore"
       - name: Build Wheel
         run: |
           python -VV
