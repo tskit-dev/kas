@@ -54,7 +54,8 @@ jobs:
         shell: bash
         run: |
           set -ex
-          ${PYTHON} -m pip install -v kastore --only-binary :all: -f python/dist/ --no-index          rm -rf python/kastore python/*.so
+          ${PYTHON} -m pip install -v kastore --only-binary :all: -f python/dist/ --no-index
+          rm -rf python/kastore python/*.so
           ${PYTHON} -m nose -v python
       - name: Upload Wheels
         uses: actions/upload-artifact@v1
