@@ -54,13 +54,8 @@ jobs:
         shell: bash
         run: |
           set -ex
-          rm -rf python/kastore python/*.so
+          ${PYTHON} -m pip install -v kastore --only-binary :all: -f python/dist/ --no-index          rm -rf python/kastore python/*.so
           ${PYTHON} -m nose -v python
-      - name: Upload Wheels
-        uses: actions/upload-artifact@v1
-        with:
-          name: osx-wheel-${{ matrix.python }}
-          path: python/dist
       - name: Upload Wheels
         uses: actions/upload-artifact@v1
         with:
@@ -96,7 +91,7 @@ jobs:
           python setup.py bdist_wheel
       - name: Run tests
         run: |
-          #pip install -v kastore --only-binary :all: -f python/dist/ --no-index
+          pip install -v kastore --only-binary :all: -f python/dist/ --no-index
           rm -rf python/kastore python/*.so
           python -m nose -v python
       - name: Upload Wheels
