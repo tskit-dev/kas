@@ -46,6 +46,7 @@ jobs:
         shell: bash
         run: |
           set -ex
+          cd python
           ${PYTHON} setup.py bdist_wheel
       - name: Run tests
         env:
@@ -90,6 +91,7 @@ jobs:
           python -c "import kastore"
       - name: Build Wheel
         run: |
+          cd python
           python setup.py bdist_wheel
       - name: Run tests
         run: |
