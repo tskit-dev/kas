@@ -119,7 +119,7 @@ jobs:
 
       - name: Run tests (3.8)
         run: |
-          pip install numpy>=1.7 humanize nosetests
+          pip install numpy>=1.7 humanize nose
           pip install -v kastore --only-binary :all: --no-index -f python/dist/wheelhouse
           python -m nose -v python
 
@@ -130,7 +130,7 @@ jobs:
 
       - name: Run tests (3.7)
         run: |
-          pip install numpy>=1.7 humanize nosetests
+          pip install numpy>=1.7 humanize nose
           pip install -v kastore --only-binary :all: --no-index -f python/dist/wheelhouse
           python -m nose -v python
 
@@ -141,7 +141,7 @@ jobs:
 
       - name: Run tests (3.6)
         run: |
-          pip install numpy>=1.7 humanize nosetests
+          pip install numpy>=1.7 humanize nose
           pip install -v kastore --only-binary :all: --no-index -f python/dist/wheelhouse
           python -m nose -v python
 
