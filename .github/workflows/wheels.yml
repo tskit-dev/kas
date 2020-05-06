@@ -149,4 +149,4 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: linux-wheels
-          path: .python/dist/wheelhouse/
+          path: python/dist/wheelhouse/
