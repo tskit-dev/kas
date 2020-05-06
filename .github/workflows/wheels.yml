@@ -119,8 +119,7 @@ jobs:
 
       - name: Run tests (3.8)
         run: |
-          ls dist/wheelhouse
-          pip install -v kastore --only-binary :all: --no-index -f dist/wheelhouse
+          pip install -v kastore --only-binary :all: --no-index -f python/dist/wheelhouse
           python -m nose -v python
 
       - name: Set up Python 3.7
@@ -130,7 +129,7 @@ jobs:
 
       - name: Run tests (3.7)
         run: |
-          pip install -v kastore --only-binary :all: --no-index -f dist/wheelhouse
+          pip install -v kastore --only-binary :all: --no-index -f python/dist/wheelhouse
           python -m nose -v python
 
       - name: Set up Python 3.6
@@ -140,11 +139,11 @@ jobs:
 
       - name: Run tests (3.6)
         run: |
-          pip install -v kastore --only-binary :all: --no-index -f dist/wheelhouse
+          pip install -v kastore --only-binary :all: --no-index -f python/dist/wheelhouse
           python -m nose -v python
 
       - name: Upload Wheels
         uses: actions/upload-artifact@v1
         with:
           name: linux-wheels
-          path: ./dist/wheelhouse/
+          path: .python/dist/wheelhouse/
