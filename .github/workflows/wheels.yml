@@ -48,7 +48,7 @@ jobs:
           set -ex
           cd python
           ${PYTHON} setup.py bdist_wheel
-      - name: Run tests
+      - name: Install wheel and run tests
         env:
           PYTHON: "py -${{ matrix.python }}-${{ matrix.wordsize }}"
         shell: bash
@@ -90,7 +90,7 @@ jobs:
         run: |
           cd python
           python setup.py bdist_wheel
-      - name: Run tests
+      - name: Install wheel and run tests
         run: |
           pip install -v kastore --only-binary :all: -f python/dist/ --no-index
           rm -rf python/kastore python/*.so
@@ -100,3 +100,50 @@ jobs:
         with:
           name: osx-wheel-${{ matrix.python }}
           path: python/dist
+
+  manylinux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Build wheels
+        shell: bash
+        run: |
+          docker run --rm -v `pwd`:/project -w /project quay.io/pypa/manylinux2010_x86_64 bash docker/buildwheel.sh
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+
+      - name: Run tests (3.8)
+        run: |
+          pip install -v kastore --only-binary :all: --no-index -f dist/wheelhouse
+          python -m nose -v python
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+
+      - name: Run tests (3.7)
+        run: |
+          pip install -v kastore --only-binary :all: --no-index -f dist/wheelhouse
+          python -m nose -v python
+
+      - name: Set up Python 3.6
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.6
+
+      - name: Run tests (3.6)
+        run: |
+          pip install -v kastore --only-binary :all: --no-index -f dist/wheelhouse
+          python -m nose -v python
+
+      - name: Upload Wheels
+        uses: actions/upload-artifact@v1
+        with:
+          name: linux-wheels
+          path: ./dist/wheelhouse/
