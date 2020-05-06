@@ -54,7 +54,7 @@ jobs:
         shell: bash
         run: |
           set -ex
-          ${PYTHON} -m nose -v
+          ${PYTHON} -m nose -v python
       - name: Upload Wheels
         uses: actions/upload-artifact@v1
         with:
@@ -95,7 +95,8 @@ jobs:
           python setup.py bdist_wheel
       - name: Run tests
         run: |
-          python -m nose -v
+          #pip install -v kastore --only-binary :all: -f python/dist/ --no-index
+          python -m nose -v python
       - name: Upload Wheels
         uses: actions/upload-artifact@v1
         with:
