@@ -18,21 +18,43 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Python ${{ matrix.python }} (${{ matrix.wordsize }}) build
+      - name: Install deps
+        env:
+          PYTHON: "py -${{ matrix.python }}-${{ matrix.wordsize }}"
+        shell: bash
+        run: |
+          set -ex
+          ${PYTHON} -m pip install --upgrade pip
+          ${PYTHON} -m pip install setuptools wheel
+          ${PYTHON} -m pip install -r requirements/CI/wheel-build/requirements.txt
+      - name: Build C extension
+        env:
+          PYTHON: "py -${{ matrix.python }}-${{ matrix.wordsize }}"
+        shell: bash
+        run: |
+          set -ex
+          ${PYTHON} setup.py build_ext --inplace
+          ${PYTHON} -c "from kastore import _kastore"
+      - name: Build Wheel
         env:
           PYTHON: "py -${{ matrix.python }}-${{ matrix.wordsize }}"
         shell: bash
         run: |
           set -ex
           cd python
-          ${PYTHON} -VV
-          ${PYTHON} -m pip install --upgrade pip
-          ${PYTHON} -m pip install setuptools wheel
-          ${PYTHON} -m pip install -r requirements/CI/wheel-build.txt
-          ${PYTHON} setup.py build_ext --inplace
-          ${PYTHON} -c "from kastore import _kastore"
           ${PYTHON} setup.py bdist_wheel
+      - name: Run tests
+        env:
+          PYTHON: "py -${{ matrix.python }}-${{ matrix.wordsize }}"
+        shell: bash
+        run: |
+          set -ex
           ${PYTHON} -m nose -v
+      - name: Upload Wheels
+        uses: actions/upload-artifact@v1
+        with:
+          name: osx-wheel-${{ matrix.python }}
+          path: python/dist
       - name: Upload Wheels
         uses: actions/upload-artifact@v1
         with:
@@ -51,16 +73,22 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python }}
-      - name: Python ${{ matrix.python }} build
+      - name: Install deps
         run: |
-          cd python
-          python -VV
           pip install --upgrade pip
           pip install setuptools wheel
-          pip install -r requirements/CI/wheel-build.txt
+          pip install -r requirements/CI/wheel-build/requirements.txt
+      - name: Build C extension
+        run: |
           python setup.py build_ext --inplace
           python -c "from kastore import _kastore"
+      - name: Build Wheel
+        run: |
+          python -VV
+          cd python
           python setup.py bdist_wheel
+      - name: Run tests
+        run: |
           python -m nose -v
       - name: Upload Wheels
         uses: actions/upload-artifact@v1
