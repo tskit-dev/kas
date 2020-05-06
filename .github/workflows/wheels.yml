@@ -10,7 +10,7 @@ on:
 
 jobs:
   windows:
-    runs-on: windows-laest
+    runs-on: windows-latest
     strategy:
       matrix:
         python: [3.6, 3.7, 3.8]
@@ -64,7 +64,7 @@ jobs:
           path: python/dist
 
   OSX:
-    runs-on: macos-laest
+    runs-on: macos-latest
     strategy:
       matrix:
         python: [3.6, 3.7, 3.8]
