@@ -10,7 +10,7 @@ on:
 
 jobs:
   windows:
-    runs-on: windows-latest
+    runs-on: windows-laest
     strategy:
       matrix:
         python: [3.6, 3.7, 3.8]
@@ -64,7 +64,7 @@ jobs:
           path: python/dist
 
   OSX:
-    runs-on: macos-latest
+    runs-on: macos-laest
     strategy:
       matrix:
         python: [3.6, 3.7, 3.8]
@@ -119,6 +119,7 @@ jobs:
 
       - name: Run tests (3.8)
         run: |
+          ls dist/wheelhouse
           pip install -v kastore --only-binary :all: --no-index -f dist/wheelhouse
           python -m nose -v python
 
