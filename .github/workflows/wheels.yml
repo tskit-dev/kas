@@ -26,7 +26,7 @@ jobs:
           set -ex
           ${PYTHON} -m pip install --upgrade pip
           ${PYTHON} -m pip install setuptools wheel
-          ${PYTHON} -m pip install -r python/requirements/CI/wheel-build/requirements.txt
+#          ${PYTHON} -m pip install -r python/requirements/CI/wheel-build/requirements.txt
       - name: Build C extension
         env:
           PYTHON: "py -${{ matrix.python }}-${{ matrix.wordsize }}"
@@ -79,7 +79,7 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install setuptools wheel
-          pip install -r python/requirements/CI/wheel-build/requirements.txt
+#          pip install -r python/requirements/CI/wheel-build/requirements.txt
       - name: Build C extension
         run: |
           cd python
@@ -107,7 +107,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
 
-      - name: Build wheels
+      - name: Build wheels in docker
         shell: bash
         run: |
           docker run --rm -v `pwd`:/project -w /project quay.io/pypa/manylinux2010_x86_64 bash docker/buildwheel.sh
