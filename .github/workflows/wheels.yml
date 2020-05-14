@@ -53,7 +53,7 @@ jobs:
         shell: bash
         run: |
           set -ex
-          ${PYTHON} -m install -r python/requirements/CI/test/requirements.txt
+          ${PYTHON} -m pip install -r python/requirements/CI/tests/requirements.txt
           ${PYTHON} -m pip install -v kastore --only-binary :all: -f python/dist/ --no-index
           rm -rf python/kastore python/*.so
           ${PYTHON} -m nose -v python
@@ -90,7 +90,7 @@ jobs:
           python setup.py bdist_wheel
       - name: Install wheel and run tests
         run: |
-          pip install -r python/requirements/CI/test/requirements.txt
+          pip install -r python/requirements/CI/tests/requirements.txt
           pip install -v kastore --only-binary :all: -f python/dist/ --no-index
           rm -rf python/kastore python/*.so
           python -m nose -v python
