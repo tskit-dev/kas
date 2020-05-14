@@ -2,5 +2,7 @@ attrs
 hypothesis
 humanize
 nose
-numpy
+# This package tracks the oldest supported numpy for each python version
+# We use this to get binary compatibility with as many numpy versions as possible.
+oldest-supported-numpy
 mock
