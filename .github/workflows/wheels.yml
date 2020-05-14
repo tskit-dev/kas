@@ -39,7 +39,6 @@ jobs:
           cd python
           ${PYTHON} -VV
           ${PYTHON} setup.py build_ext --inplace
-#          ${PYTHON} -c "import _kastore"
       - name: Build Wheel
         env:
           PYTHON: "py -${{ matrix.python }}-${{ matrix.wordsize }}"
@@ -54,6 +53,7 @@ jobs:
         shell: bash
         run: |
           set -ex
+          ${PYTHON} -m install -r python/requirements/CI/test/requirements.txt
           ${PYTHON} -m pip install -v kastore --only-binary :all: -f python/dist/ --no-index
           rm -rf python/kastore python/*.so
           ${PYTHON} -m nose -v python
@@ -79,19 +79,18 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install setuptools wheel
-#          pip install -r python/requirements/CI/wheel-build/requirements.txt
       - name: Build C extension
         run: |
           cd python
           python -VV
           python setup.py build_ext --inplace
-#          python -c "import _kastore"
       - name: Build Wheel
         run: |
           cd python
           python setup.py bdist_wheel
       - name: Install wheel and run tests
         run: |
+          pip install -r python/requirements/CI/test/requirements.txt
           pip install -v kastore --only-binary :all: -f python/dist/ --no-index
           rm -rf python/kastore python/*.so
           python -m nose -v python
