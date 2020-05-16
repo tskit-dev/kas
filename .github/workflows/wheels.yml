@@ -54,12 +54,12 @@ jobs:
         run: |
           set -ex
           # We install in this odd way to make sure we get both deps and a local kastore
-          ${PYTHON} -m pip install -v kastore --only-binary kastore -f python/dist/
+          ${PYTHON} -m pip install kastore --only-binary kastore -f python/dist/
           ${PYTHON} -m pip uninstall -y kastore
           ${PYTHON} -m pip install -v kastore --only-binary kastore -f python/dist/ --no-index
           ${PYTHON} -c "import kastore"
           ${PYTHON} -m pip install -r python/requirements/CI/tests/requirements.txt
-          rm -rf python/kastore python/*.so
+          rm -rf python/kastore python/*.pyd
           ${PYTHON} -m nose -v python
       - name: Upload Wheels
         uses: actions/upload-artifact@v1
@@ -95,7 +95,7 @@ jobs:
       - name: Install wheel and run tests
         run: |
           # We install in this odd way to make sure we get both deps and a local kastore
-          pip install -v kastore --only-binary kastore -f python/dist/
+          pip install kastore --only-binary kastore -f python/dist/
           pip uninstall -y kastore
           pip install -v kastore --only-binary kastore -f python/dist/ --no-index
           python -c "import kastore"
@@ -145,7 +145,7 @@ jobs:
         run: |
           python -VV
           # We install in this odd way to make sure we get both deps and a local kastore
-          pip install -v kastore --only-binary kastore -f python/dist/wheelhouse
+          pip install kastore --only-binary kastore -f python/dist/wheelhouse
           pip uninstall -y kastore
           pip install -v kastore --only-binary kastore -f python/dist/wheelhouse --no-index
           python -c "import kastore"
@@ -161,7 +161,7 @@ jobs:
         run: |
           python -VV
           # We install in this odd way to make sure we get both deps and a local kastore
-          pip install -v kastore --only-binary kastore -f python/dist/wheelhouse
+          pip install kastore --only-binary kastore -f python/dist/wheelhouse
           pip uninstall -y kastore
           pip install -v kastore --only-binary kastore -f python/dist/wheelhouse --no-index
           python -c "import kastore"
@@ -177,7 +177,7 @@ jobs:
         run: |
           python -VV
           # We install in this odd way to make sure we get both deps and a local kastore
-          pip install -v kastore --only-binary kastore -f python/dist/wheelhouse
+          pip install kastore --only-binary kastore -f python/dist/wheelhouse
           pip uninstall -y kastore
           pip install -v kastore --only-binary kastore -f python/dist/wheelhouse --no-index
           python -c "import kastore"
