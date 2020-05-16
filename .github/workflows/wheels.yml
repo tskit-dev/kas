@@ -53,6 +53,7 @@ jobs:
         shell: bash
         run: |
           set -ex
+          ${PYTHON} -c "import kastore"
           ${PYTHON} -m pip install -r python/requirements/CI/tests/requirements.txt
           ${PYTHON} -m pip install -v kastore --only-binary :all: -f python/dist/ --no-index
           rm -rf python/kastore python/*.so
@@ -90,6 +91,7 @@ jobs:
           python setup.py bdist_wheel
       - name: Install wheel and run tests
         run: |
+          python -c "import kastore"
           pip install -r python/requirements/CI/tests/requirements.txt
           pip install -v kastore --only-binary :all: -f python/dist/ --no-index
           rm -rf python/kastore python/*.so
@@ -106,6 +108,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
 
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+
+      - name: Build sdist
+        shell: bash
+        run: |
+          cd python
+          python setup.py sdist
+
+      - name: Upload sdist
+        uses: actions/upload-artifact@v1
+        with:
+          name: sdist
+          path: python/dist
+
       - name: Build wheels in docker
         shell: bash
         run: |
@@ -119,6 +138,7 @@ jobs:
       - name: Run tests (3.8)
         run: |
           python -VV
+          python -c "import kastore"
           pip install -r python/requirements/CI/tests/requirements.txt
           pip install -v kastore --only-binary :all: --no-index -f python/dist/wheelhouse
           python -m nose -v python
@@ -131,6 +151,7 @@ jobs:
       - name: Run tests (3.7)
         run: |
           python -VV
+          python -c "import kastore"
           pip install -r python/requirements/CI/tests/requirements.txt
           pip install -v kastore --only-binary :all: --no-index -f python/dist/wheelhouse
           python -m nose -v python
@@ -143,6 +164,7 @@ jobs:
       - name: Run tests (3.6)
         run: |
           python -VV
+          python -c "import kastore"
           pip install -r python/requirements/CI/tests/requirements.txt
           pip install -v kastore --only-binary :all: --no-index -f python/dist/wheelhouse
           python -m nose -v python
