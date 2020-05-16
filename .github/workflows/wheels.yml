@@ -17,7 +17,7 @@ jobs:
         wordsize: [64]
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Install deps
         env:
           PYTHON: "py -${{ matrix.python }}-${{ matrix.wordsize }}"
@@ -62,7 +62,7 @@ jobs:
           rm -rf python/kastore python/*.pyd
           ${PYTHON} -m nose -v python
       - name: Upload Wheels
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: win-wheel-${{ matrix.python }}-${{ matrix.wordsize }}
           path: python/dist
@@ -74,9 +74,9 @@ jobs:
         python: [3.6, 3.7, 3.8]
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python }}
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
       - name: Install deps
@@ -103,7 +103,7 @@ jobs:
           rm -rf python/kastore python/*.so
           python -m nose -v python
       - name: Upload Wheels
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: osx-wheel-${{ matrix.python }}
           path: python/dist
@@ -112,10 +112,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: 3.8
 
@@ -126,7 +126,7 @@ jobs:
           python setup.py sdist
 
       - name: Upload sdist
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: sdist
           path: python/dist
@@ -137,7 +137,7 @@ jobs:
           docker run --rm -v `pwd`:/project -w /project quay.io/pypa/manylinux2010_x86_64 bash docker/buildwheel.sh
 
       - name: Set up Python 3.8
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: 3.8
 
@@ -153,7 +153,7 @@ jobs:
           python -m nose -v python
 
       - name: Set up Python 3.7
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: 3.7
 
@@ -169,7 +169,7 @@ jobs:
           python -m nose -v python
 
       - name: Set up Python 3.6
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: 3.6
 
@@ -185,7 +185,17 @@ jobs:
           python -m nose -v python
 
       - name: Upload Wheels
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: linux-wheels
           path: python/dist/wheelhouse
+
+
+  PyPI Upload:
+    runs-on: ubuntu-latest
+    needs: ['windows', 'OSX', 'manylinux']
+    steps:
+      - name: Download all
+        uses: actions/download-artifact@v2
+      - name: Display structure of downloaded files
+        run: ls -R
