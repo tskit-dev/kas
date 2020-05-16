@@ -53,7 +53,7 @@ jobs:
         shell: bash
         run: |
           set -ex
-          ${PYTHON} -m pip install -v kastore --only-binary :all: -f python/dist/ --no-index
+          ${PYTHON} -m pip install -v kastore --only-binary kastore -f python/dist/
           ${PYTHON} -c "import kastore"
           ${PYTHON} -m pip install -r python/requirements/CI/tests/requirements.txt
           rm -rf python/kastore python/*.so
@@ -91,7 +91,7 @@ jobs:
           python setup.py bdist_wheel
       - name: Install wheel and run tests
         run: |
-          pip install -v kastore --only-binary :all: -f python/dist/ --no-index
+          pip install -v kastore --only-binary kastore -f python/dist/
           python -c "import kastore"
           pip install -r python/requirements/CI/tests/requirements.txt
           rm -rf python/kastore python/*.so
@@ -138,7 +138,7 @@ jobs:
       - name: Run tests (3.8)
         run: |
           python -VV
-          pip install -v kastore --only-binary :all: --no-index -f python/dist/wheelhouse
+          pip install -v kastore --only-binary kastore -f python/dist/wheelhouse
           python -c "import kastore"
           pip install -r python/requirements/CI/tests/requirements.txt
           python -m nose -v python
@@ -151,7 +151,7 @@ jobs:
       - name: Run tests (3.7)
         run: |
           python -VV
-          pip install -v kastore --only-binary :all: --no-index -f python/dist/wheelhouse
+          pip install -v kastore --only-binary kastore -f python/dist/wheelhouse
           python -c "import kastore"
           pip install -r python/requirements/CI/tests/requirements.txt
           python -m nose -v python
@@ -164,7 +164,7 @@ jobs:
       - name: Run tests (3.6)
         run: |
           python -VV
-          pip install -v kastore --only-binary :all: --no-index -f python/dist/wheelhouse
+          pip install -v kastore --only-binary kastore -f python/dist/wheelhouse
           python -c "import kastore"
           pip install -r python/requirements/CI/tests/requirements.txt
           python -m nose -v python
