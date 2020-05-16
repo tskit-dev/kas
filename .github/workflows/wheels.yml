@@ -26,7 +26,6 @@ jobs:
           set -ex
           ${PYTHON} -m pip install --upgrade pip
           ${PYTHON} -m pip install setuptools wheel cython
-#          ${PYTHON} -m pip install -r python/requirements/CI/wheel-build/requirements.txt
       - name: Build C extension
         env:
           PYTHON: "py -${{ matrix.python }}-${{ matrix.wordsize }}"
@@ -191,7 +190,7 @@ jobs:
           path: python/dist/wheelhouse
 
 
-  PyPI Upload:
+  PyPI_Upload:
     runs-on: ubuntu-latest
     needs: ['windows', 'OSX', 'manylinux']
     steps:
