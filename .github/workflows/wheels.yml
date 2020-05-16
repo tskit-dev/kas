@@ -196,5 +196,12 @@ jobs:
     steps:
       - name: Download all
         uses: actions/download-artifact@v2
-      - name: Display structure of downloaded files
-        run: ls -R
+      - name: Move to dist
+        run: |
+          mkdir dist
+          cp */*.{whl,gz} dist/.
+      - name: Publish distribution 📦 to Test PyPI
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          password: ${{ secrets.test_pypi_password }}
+          repository_url: https://test.pypi.org/legacy/
