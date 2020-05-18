@@ -2,6 +2,10 @@ name: Build and test wheels
 
 on:
   push:
+    branches:
+      - master
+      - test
+  create:
   release:
     types: [published, created]
 
