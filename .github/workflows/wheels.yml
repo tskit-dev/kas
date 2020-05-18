@@ -201,14 +201,13 @@ jobs:
           mkdir dist
           cp */*.{whl,gz} dist/.
       - name: Publish distribution to Test PyPI
-        if: github.event.action == 'created' && startsWith(github.event.relase.tag_name, 'py')
+        if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/py')
         uses: pypa/gh-action-pypi-publish@master
         with:
           password: ${{ secrets.test_pypi_password }}
           repository_url: https://test.pypi.org/legacy/
       - name: Publish distribution to PRODUCTION PyPI
-        if: github.event.action == 'published' && startsWith(github.event.relase.tag_name, 'py')
+        if: github.event_name == 'release' && startsWith(github.event.release.tag_name, 'py')
         uses: pypa/gh-action-pypi-publish@master
         with:
           password: ${{ secrets.test_pypi_password }}
-          repository_url: https://test.pypi.org/legacy/
