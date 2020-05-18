@@ -5,8 +5,8 @@ on:
     branches:
       - master
       - test
-  pull_request:
-  create:
+  release:
+    types: [published, created]
 
 jobs:
   windows:
@@ -200,7 +200,14 @@ jobs:
         run: |
           mkdir dist
           cp */*.{whl,gz} dist/.
-      - name: Publish distribution 📦 to Test PyPI
+      - name: Publish distribution to Test PyPI
+        if: github.event.action == 'created'
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          password: ${{ secrets.test_pypi_password }}
+          repository_url: https://test.pypi.org/legacy/
+      - name: Publish distribution to PRODUCTION PyPI
+        if: github.event.action == 'published'
         uses: pypa/gh-action-pypi-publish@master
         with:
           password: ${{ secrets.test_pypi_password }}
